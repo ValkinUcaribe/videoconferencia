@@ -7,6 +7,7 @@ import os
 
 app = Flask(__name__)
 CORS(app)
+print(jwt.__file__) 
 
 load_dotenv()
 
