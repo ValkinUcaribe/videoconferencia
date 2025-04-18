@@ -1,0 +1,66 @@
+<!--AQUI VA LO NUEVO CON LO DE VALKIN-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Valkin Simuladores</title>
+    <script src='https://8x8.vc/vpaas-magic-cookie-e5b67798664c4c70a9e180342ebc2285/external_api.js' async></script>
+    <style>
+        html, body, #jaas-container { height: 100%; margin: 0; padding: 0; }
+    </style>
+</head>
+<body>
+    <div id="jaas-container"></div>
+
+    <script>
+        window.onload = () => {
+            fetch("/token", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    room: "*",
+                    user: {
+                        id: "admin-123",
+                        name: "Valkin Simulador",
+                        email: "soportesimuladorvueloonline@gmail.com",
+                        moderator: true
+                    }
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const options = {
+                    roomName: "vpaas-magic-cookie-e5b67798664c4c70a9e180342ebc2285/ValkinSimulators",
+                    parentNode: document.querySelector('#jaas-container'),
+                    jwt: data.token,
+                    configOverwrite: {
+                        startWithAudioMuted: true,
+                        startWithVideoMuted: true
+                    },
+                    interfaceConfigOverwrite: {
+                        SHOW_JITSI_WATERMARK: false
+                    },
+                    userInfo: {
+                        email: "soportesimuladorvueloonline@gmail.com",
+                        displayName: "Valkin Simuladores"
+                    }
+                };
+
+                const api = new JitsiMeetExternalAPI("8x8.vc", options);
+
+                api.addEventListener("videoConferenceJoined", () => {
+                    console.log("Conectado a la reunión como", options.userInfo.displayName);
+                });
+
+                api.addEventListener("readyToClose", () => {
+                    window.location.reload();
+                });
+            })
+            .catch(err => console.error("Error al obtener el token:", err));
+        };
+    </script>
+</body>
+</html>
+
+
